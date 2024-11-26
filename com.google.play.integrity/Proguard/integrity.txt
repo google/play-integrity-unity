@@ -30,6 +30,7 @@
 
 -keep class com.google.android.play.core.integrity.IntegrityTokenResponse {
   public abstract java.lang.String token();
+  public abstract com.google.android.gms.tasks.Task showDialog(android.app.Activity, int);
 }
 
 -keep class com.google.android.play.core.integrity.IntegrityServiceException {
@@ -55,6 +56,18 @@
     public static int PLAY_SERVICES_VERSION_OUTDATED;
     public static int CLOUD_PROJECT_NUMBER_IS_INVALID;
     public static int INTERNAL_ERROR;
+    public static int CLIENT_TRANSIENT_ERROR;
+}
+
+-keep class com.google.android.play.core.integrity.model.IntegrityDialogResponseCode {
+    public static int DIALOG_UNAVAILABLE;
+    public static int DIALOG_FAILED;
+    public static int DIALOG_CANCELLED;
+    public static int DIALOG_SUCCESSFUL;
+}
+
+-keep class com.google.android.play.core.integrity.model.IntegrityDialogTypeCode {
+    public static int GET_LICENSED;
 }
 
 -keep class com.google.android.play.core.integrity.StandardIntegrityManager {
@@ -86,10 +99,15 @@
 
 -keep class com.google.android.play.core.integrity.StandardIntegrityManager$StandardIntegrityToken {
   public abstract java.lang.String token();
+  public abstract com.google.android.gms.tasks.Task showDialog(android.app.Activity, int);
 }
 
 -keep class com.google.android.play.core.integrity.IntegrityManagerFactory {
   public static com.google.android.play.core.integrity.StandardIntegrityManager createStandard(android.content.Context);
+}
+
+-keep class com.google.android.play.core.integrity.StandardIntegrityException {
+  public int getErrorCode();
 }
 
 -keep class com.google.android.play.core.integrity.model.StandardIntegrityErrorCode {

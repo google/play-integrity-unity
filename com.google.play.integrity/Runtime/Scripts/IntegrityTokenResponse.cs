@@ -12,7 +12,9 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
+using Google.Play.Common;
 using Google.Play.Core.Internal;
+using Google.Play.Integrity.Internal;
 using UnityEngine;
 
 namespace Google.Play.Integrity
@@ -28,13 +30,47 @@ namespace Google.Play.Integrity
         /// </summary>
         public string Token { get; private set; }
 
+        private readonly PlayCoreIntegrityTokenResponse _playCoreIntegrityTokenResponse;
+
         internal IntegrityTokenResponse(AndroidJavaObject tokenResponse)
         {
-            using (tokenResponse)
+            _playCoreIntegrityTokenResponse = new PlayCoreIntegrityTokenResponse(tokenResponse);
+            var javaTokenString = tokenResponse.Call<AndroidJavaObject>("token");
+            Token = PlayCoreHelper.ConvertJavaString(javaTokenString);
+        }
+
+        /// <summary>
+        /// Displays a dialog to the user. This method can only be called once per
+        /// Integrity API response.
+        ///
+        /// <param name="typeCode">determines which Integrity Dialog type should be shown. See
+        /// https://developer.android.com/google/play/integrity/reference/com/google/android/play/core/integrity/model/IntegrityDialogTypeCode
+        /// for the supported types.</param>
+        /// </summary>
+        ///
+        /// <returns>
+        /// A <see cref="PlayAsyncOperation{TResult,TError}"/> that returns
+        /// <see cref="IntegrityDialogResponseCode"/> on successful callback or
+        /// <see cref="IntegrityErrorCode"/> on failure callback.
+        /// </returns>
+        public PlayAsyncOperation<IntegrityDialogResponseCode, IntegrityErrorCode> ShowDialog(int typeCode)
+        {
+            var operation = new IntegrityAsyncOperation<IntegrityDialogResponseCode>();
+            var showDialogTask = _playCoreIntegrityTokenResponse.ShowDialog(typeCode);
+            showDialogTask.RegisterOnSuccessCallback(integrityDialogResponseCode =>
             {
-                var javaTokenString = tokenResponse.Call<AndroidJavaObject>("token");
-                Token = PlayCoreHelper.ConvertJavaString(javaTokenString);
-            }
+                operation.SetResult(
+                    PlayCoreTranslator.TranslatePlayCoreIntegrityDialogResponseCode(integrityDialogResponseCode));
+                showDialogTask.Dispose();
+                _playCoreIntegrityTokenResponse.Dispose();
+            });
+            showDialogTask.RegisterOnFailureCallback((reason, errorCode) =>
+            {
+                operation.SetError(PlayCoreTranslator.TranslatePlayCoreErrorCode(errorCode));
+                showDialogTask.Dispose();
+                _playCoreIntegrityTokenResponse.Dispose();
+            });
+            return operation;
         }
     }
 }

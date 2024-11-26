@@ -66,6 +66,14 @@ namespace Google.Play.Integrity.Internal
             public const int InternalError = -100;
         }
 
+        private static class JavaIntegrityIntegrityDialogResponseCode
+        {
+            public const int DialogUnavailable = 0;
+            public const int DialogFailed = 1;
+            public const int DialogCancelled = 2;
+            public const int DialogSuccessful = 3;
+        }
+
         private static readonly Dictionary<int, IntegrityErrorCode> PlayCoreToIntegrityErrors =
             new Dictionary<int, IntegrityErrorCode>
             {
@@ -120,6 +128,15 @@ namespace Google.Play.Integrity.Internal
                 { JavaIntegrityErrorCode.InternalError, StandardIntegrityErrorCode.InternalError },
             };
 
+        private static readonly Dictionary<int, IntegrityDialogResponseCode> PlayCoreToIntegrityDialogResponseCodes =
+            new Dictionary<int, IntegrityDialogResponseCode>
+            {
+                { JavaIntegrityIntegrityDialogResponseCode.DialogUnavailable, IntegrityDialogResponseCode.DialogUnavailable },
+                { JavaIntegrityIntegrityDialogResponseCode.DialogFailed, IntegrityDialogResponseCode.DialogFailed },
+                { JavaIntegrityIntegrityDialogResponseCode.DialogCancelled, IntegrityDialogResponseCode.DialogCancelled },
+                { JavaIntegrityIntegrityDialogResponseCode.DialogSuccessful, IntegrityDialogResponseCode.DialogSuccessful },
+            };
+
         /// <summary>
         /// Translates Play Core's IntegrityErrorCode into its corresponding public-facing IntegrityErrorCode.
         /// </summary>
@@ -154,6 +171,25 @@ namespace Google.Play.Integrity.Internal
             }
 
             return translatedErrorCode;
+        }
+
+        /// <summary>
+        /// Translates Play Core's IntegrityDialogResponseCode into its corresponding public-facing
+        /// IntegrityDialogResponseCode.
+        /// </summary>
+        /// <exception cref="NotImplementedException">
+        /// Throws if the provided Java error code does not have a corresponding value in IntegrityDialogResponseCode.
+        /// </exception>
+        public static IntegrityDialogResponseCode TranslatePlayCoreIntegrityDialogResponseCode(
+            int javaIntegrityDialogResponseCode)
+        {
+            IntegrityDialogResponseCode integrityDialogResponseCode;
+            if (!PlayCoreToIntegrityDialogResponseCodes.TryGetValue(javaIntegrityDialogResponseCode, out integrityDialogResponseCode))
+            {
+                throw new NotImplementedException("Unexpected response code: " + integrityDialogResponseCode);
+            }
+
+            return integrityDialogResponseCode;
         }
     }
 }

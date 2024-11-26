@@ -59,9 +59,19 @@ namespace Google.Play.Integrity
                    new AndroidJavaClass(StandardIntegrityTokenRequestClassName))
             using (var standardIntegrityTokenRequestBuilder =
                    standardIntegrityTokenRequestClass.CallStatic<AndroidJavaObject>("builder"))
+            using (var javaVerdictOptOut = new AndroidJavaObject("java.util.HashSet"))
             {
                 standardIntegrityTokenRequestBuilder.Call<AndroidJavaObject>("setRequestHash",
                     request.RequestHash);
+                foreach (int verdict in request.VerdictOptOut)
+                {
+                    using (AndroidJavaObject javaInt = new AndroidJavaObject("java.lang.Integer", verdict))
+                    {
+                        javaVerdictOptOut.Call<bool>("add", javaInt);
+                    }
+                }
+                standardIntegrityTokenRequestBuilder.Call<AndroidJavaObject>("setVerdictOptOut",
+                    javaVerdictOptOut);
                 var javaStandardIntegrityTokenRequest =
                     standardIntegrityTokenRequestBuilder.Call<AndroidJavaObject>("build");
                 var standardIntegrityTokenTask =

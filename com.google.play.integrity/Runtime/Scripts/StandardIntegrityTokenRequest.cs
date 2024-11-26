@@ -13,6 +13,7 @@
 // limitations under the License.
 
 using System;
+using System.Collections.Generic;
 
 namespace Google.Play.Integrity
 {
@@ -28,12 +29,20 @@ namespace Google.Play.Integrity
         public String RequestHash { get; private set; }
 
         /// <summary>
+        /// The verdict opt-out set. See https://developer.android.com/google/play/integrity/reference/com/google/android/play/core/integrity/model/StandardIntegrityVerdictOptOut.html
+        /// for more information about the supported codes for opting out from verdicts.
+        /// </summary>
+        public HashSet<int> VerdictOptOut { get; private set; }
+
+        /// <summary>
         /// Constructor.
         /// </summary>
         /// <param name="requestHash">A request hash to bind the integrity token to.</param>
-        public StandardIntegrityTokenRequest(String requestHash = null)
+        /// <param name="verdictOptOut">A set of integrity token verdicts that should be opted-out.</param>
+        public StandardIntegrityTokenRequest(String requestHash = null, HashSet<int> verdictOptOut = null)
         {
             RequestHash = requestHash;
+            VerdictOptOut = verdictOptOut ?? new HashSet<int>();
         }
     }
 }
