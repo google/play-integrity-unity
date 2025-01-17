@@ -24,6 +24,11 @@ namespace Google.Play.Integrity.Samples.IntegrityTestApp
     internal class FakeIntegrityVerifierServer
     {
         /// <summary>
+        /// The response of the decryption and verification.
+        /// </summary>
+        public enum DecryptionResponse { Allow, AllowWithLimits, Deny }
+
+        /// <summary>
         /// Generates the nonce as a random byte array of length numBytes, returns the Base64 representation of this
         /// byte array.
         /// </summary>
@@ -39,55 +44,17 @@ namespace Google.Play.Integrity.Samples.IntegrityTestApp
         }
 
         /// <summary>
-        /// Returns whether the provided token is a valid Base64 encoded JWE token (five Base64 encoded chunks,
-        /// separated by period characters).
+        /// Decrypts and verifies the integrity token.
         /// </summary>
-        public static bool IsValidToken(string base64Token)
+        public static DecryptionResponse DecryptAndVerify(string encryptedToken)
         {
-            var base64Segments = base64Token.Split('.');
-            if (base64Segments.Length != 5)
-            {
-                Debug.LogErrorFormat("Expected token to have 5 segments, actual segment count is: {0}",
-                    base64Segments.Length);
-                return false;
-            }
-
-            for (var i = 0; i < base64Segments.Length; i++)
-            {
-                var segment = base64Segments[i];
-
-                if (string.IsNullOrEmpty(segment))
-                {
-                    Debug.LogErrorFormat("Base64 string at index {0} is empty.", i);
-                    return false;
-                }
-
-                // Convert from URL-safe encoding
-                segment = segment.Replace("-", "+").Replace("_", "/");
-                // Append paddings
-                switch (segment.Length % 4)
-                {
-                    case 2:
-                        segment += "==";
-                        break;
-                    case 3:
-                        segment += "=";
-                        break;
-                }
-
-                try
-                {
-                    Convert.FromBase64String(segment);
-                }
-                catch (FormatException e)
-                {
-                    Debug.LogErrorFormat("Unable to decode Base64 string at index {0}: {1}", i, e);
-                    Debug.LogErrorFormat("Undecodable string = {0}", segment);
-                    return false;
-                }
-            }
-
-            return true;
+            // After you request an integrity verdict, the Play Integrity API provides an encrypted
+            // response token. To obtain the device integrity verdicts, you must decrypt the integrity
+            // token on Google's servers.
+            // Refer to the documentation for more details:
+            // https://developer.android.com/google/play/integrity/standard#decrypt-and
+            return DecryptionResponse.Allow;
         }
+
     }
 }

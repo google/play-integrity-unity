@@ -76,7 +76,12 @@ namespace Google.Play.Integrity.Samples.IntegrityTestApp
         {
             var nonce = FakeIntegrityVerifierServer.GenerateNonce(42);
             AppendStatusLog("Nonce = " + nonce);
-            var tokenRequest = new IntegrityTokenRequest(nonce);
+            // Apps exclusively distributed outside of Google Play and SDKs also have to specify their
+            // Google Cloud project number. Apps on Google Play should link their Cloud project in the
+            // Play Console and then do not need to set it in the request.
+            long cloudProjectNumber = 0;  // Add cloud project number here.
+            AppendStatusLog("CloudProjectNumber = " + cloudProjectNumber);
+            var tokenRequest = new IntegrityTokenRequest(nonce, cloudProjectNumber);
             var requestIntegrityTokenOperation =
                 _integrityManager.RequestIntegrityToken(tokenRequest);
 
@@ -89,18 +94,18 @@ namespace Google.Play.Integrity.Samples.IntegrityTestApp
             }
 
             var tokenResponse = requestIntegrityTokenOperation.GetResult();
-            var jwtTokenBase64 = tokenResponse.Token;
+            var jwtToken = tokenResponse.Token;
 
-            if (jwtTokenBase64 == null)
+            if (jwtToken == null)
             {
                 AppendStatusLog("IntegrityAsyncOperation succeeded, but token is null.");
                 yield break;
             }
 
-            AppendStatusLog("IntegrityAsyncOperation succeeded with token: " + jwtTokenBase64);
+            AppendStatusLog("IntegrityAsyncOperation succeeded with token: " + jwtToken);
 
-            var tokenIsValid = FakeIntegrityVerifierServer.IsValidToken(jwtTokenBase64);
-            AppendStatusLog(tokenIsValid ? "Token is a valid JWE." : "Token is invalid.");
+            var decryptionResponse = FakeIntegrityVerifierServer.DecryptAndVerify(jwtToken);
+            AppendStatusLog("Decryption response: " + decryptionResponse.ToString());
         }
 
         IEnumerator RequestStandardIntegrityTokenCo()
@@ -121,7 +126,10 @@ namespace Google.Play.Integrity.Samples.IntegrityTestApp
             }
 
             var tokenProvider = prepareIntegrityTokenOperation.GetResult();
-            var standardIntegrityTokenRequest = new StandardIntegrityTokenRequest();
+            // When you're checking a user action in your app with the Play Integrity API, you can
+            // leverage the requestHash field to mitigate against tampering attacks
+            var requestHash = "2cp24z...";
+            var standardIntegrityTokenRequest = new StandardIntegrityTokenRequest(requestHash);
             var standardIntegrityTokenOperation = tokenProvider.Request(standardIntegrityTokenRequest);
 
             yield return standardIntegrityTokenOperation;
@@ -134,15 +142,18 @@ namespace Google.Play.Integrity.Samples.IntegrityTestApp
             }
 
             var tokenResponse = standardIntegrityTokenOperation.GetResult();
-            var jwtTokenBase64 = tokenResponse.Token;
+            var encryptedToken = tokenResponse.Token;
 
-            if (jwtTokenBase64 == null)
+            if (encryptedToken == null)
             {
                 AppendStatusLog("StandardIntegrityAsyncOperation succeeded, but token is null.");
                 yield break;
             }
 
-            AppendStatusLog("StandardIntegrityAsyncOperation succeeded with token: " + jwtTokenBase64);
+            AppendStatusLog("StandardIntegrityAsyncOperation succeeded with token: " + encryptedToken);
+
+            var decryptionResponse = FakeIntegrityVerifierServer.DecryptAndVerify(encryptedToken);
+            AppendStatusLog("Decryption response: " + decryptionResponse.ToString());
         }
     }
 }
