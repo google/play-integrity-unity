@@ -1,5 +1,8 @@
 # Changelog for com.google.play.integrity
 
+## [1.4.1] - 2025-02-05
+- Updated Play Core dependency to 1.8.6.
+
 ## [1.4.0] - 2024-10-14
 - Updated Java Play Integrity API dependency from 1.3.0 to 1.4.0.
 - Add verdict opt-out to standard requests.
