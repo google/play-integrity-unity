@@ -88,9 +88,11 @@ namespace Google.Play.Integrity
         AppUidMismatch = 7,
 
         /// <summary>
-        /// The calling app is making too many requests to the API and hence is throttled.
+        /// The calling app has made too many requests to the API and has been throttled, or your
+        /// app has exceeded its daily request quota.
         /// <para>
-        /// Retry with an exponential backoff.
+        /// Retry with an exponential backoff. Request an increase to your daily request quota if
+        /// you're at your daily request limit.
         /// </para>
         /// </summary>
         TooManyRequests = 8,
