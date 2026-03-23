@@ -58,15 +58,17 @@ namespace Google.Play.Integrity.Internal
         }
 
         /// <summary>
-        /// Returns a <see cref="PlayServicesTask{TAndroidJava}" /> which returns an IntegrityDialogResponse
-        /// AndroidJavaObject on the registered on success callback.
+        /// Returns a <see cref="PlayServicesTask{Int32}" /> which returns an Integer representing the
+        /// IntegrityDialogResponseCode on the registered on success callback. See
+        /// https://developer.android.com/google/play/integrity/reference/com/google/android/play/core/integrity/model/IntegrityDialogResponseCode
+        /// for the supported codes.
         /// </summary>
         /// <param name="integrityDialogRequest">The IntegrityDialogRequest AndroidJavaObject.</param>
-        public PlayServicesTask<AndroidJavaObject> ShowDialog(AndroidJavaObject integrityDialogRequest)
+        public PlayServicesTask<int> ShowDialog(AndroidJavaObject integrityDialogRequest)
         {
             var javaTask =
                 _javaIntegrityManager.Call<AndroidJavaObject>("showDialog", integrityDialogRequest);
-            return new PlayServicesTask<AndroidJavaObject>(javaTask);
+            return new PlayServicesTask<int>(javaTask);
         }
 
         public void Dispose()
