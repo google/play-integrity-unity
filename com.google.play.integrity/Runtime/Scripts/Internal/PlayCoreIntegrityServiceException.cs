@@ -39,6 +39,15 @@ namespace Google.Play.Integrity.Internal
             _javaIntegrityServiceException = javaIntegrityServiceException;
         }
 
+        internal AndroidJavaObject JavaException
+        {
+            get
+            {
+                if (_disposed) throw new ObjectDisposedException(nameof(PlayCoreIntegrityServiceException));
+                return _javaIntegrityServiceException;
+            }
+        }
+
         internal int ErrorCode
         {
             get

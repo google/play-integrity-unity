@@ -12,6 +12,7 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
+using System;
 using Google.Play.Common;
 using Google.Play.Core.Internal;
 using Google.Play.Integrity.Internal;
@@ -22,6 +23,10 @@ namespace Google.Play.Integrity
     /// <summary>
     /// Manages requests for integrity information.
     /// </summary>
+    /// <remarks>
+    /// DEPRECATED: Please use <see cref="IntegrityManagerV2"/> instead.
+    /// </remarks>
+    [Obsolete("IntegrityManager is deprecated. Please use IntegrityManagerV2 instead, which provides enhanced error handling and native remediation dialog support.")]
     public class IntegrityManager
     {
         private readonly PlayCoreIntegrityManager _playCoreIntegrityManager;

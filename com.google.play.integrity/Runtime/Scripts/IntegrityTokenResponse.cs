@@ -12,6 +12,7 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
+using System;
 using Google.Play.Common;
 using Google.Play.Core.Internal;
 using Google.Play.Integrity.Internal;
@@ -39,20 +40,27 @@ namespace Google.Play.Integrity
             Token = PlayCoreHelper.ConvertJavaString(javaTokenString);
         }
 
+        internal AndroidJavaObject GetJavaTokenResponse()
+        {
+            return _playCoreIntegrityTokenResponse.GetJavaTokenResponse();
+        }
+
         /// <summary>
         /// Displays a dialog to the user. This method can only be called once per
         /// Integrity API response.
-        ///
+        /// </summary>
+        /// <remarks>
+        /// DEPRECATED: Please use <see cref="IntegrityManagerV2.ShowDialog(IntegrityDialogRequest)"/> instead.
+        /// </remarks>
         /// <param name="typeCode">determines which Integrity Dialog type should be shown. See
         /// https://developer.android.com/google/play/integrity/reference/com/google/android/play/core/integrity/model/IntegrityDialogTypeCode
         /// for the supported types.</param>
-        /// </summary>
-        ///
         /// <returns>
         /// A <see cref="PlayAsyncOperation{TResult,TError}"/> that returns
         /// <see cref="IntegrityDialogResponseCode"/> on successful callback or
         /// <see cref="IntegrityErrorCode"/> on failure callback.
         /// </returns>
+        [Obsolete("IntegrityTokenResponse.ShowDialog is deprecated. Please use IntegrityManagerV2.ShowDialog(IntegrityDialogRequest) instead.")]
         public PlayAsyncOperation<IntegrityDialogResponseCode, IntegrityErrorCode> ShowDialog(int typeCode)
         {
             var operation = new IntegrityAsyncOperation<IntegrityDialogResponseCode>();
