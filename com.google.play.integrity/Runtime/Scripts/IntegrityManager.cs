@@ -59,7 +59,7 @@ namespace Google.Play.Integrity
         /// verify the received token from within the client app. In particular, never expose any decryption keys to the
         /// client app.
         ///
-        /// <p>See https://developer.android.com/google/play/integrity/verdict#token-format.
+        /// <p>See https://developer.android.com/google/play/integrity/classic#token-format.
         /// </summary>
         /// <returns>
         /// A <see cref="PlayAsyncOperation{IntegrityTokenResponse, IntegrityErrorCode}"/> that returns
