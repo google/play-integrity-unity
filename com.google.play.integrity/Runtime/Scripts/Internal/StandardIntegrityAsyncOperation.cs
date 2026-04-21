@@ -28,4 +28,16 @@ namespace Google.Play.Integrity.Internal
             get { return IsDone && Error == StandardIntegrityErrorCode.NoError; }
         }
     }
+
+    /// <summary>
+    /// Represents an asynchronous operation that produces a result or an StandardIntegrityError upon completion.
+    /// </summary>
+    /// <typeparam name="TResult">The type of the result of the operation.</typeparam>
+    internal class StandardIntegrityAsyncOperationV2<TResult> : PlayAsyncOperationImpl<TResult, StandardIntegrityError>
+    {
+        public override bool IsSuccessful
+        {
+            get { return IsDone && Error == null; }
+        }
+    }
 }

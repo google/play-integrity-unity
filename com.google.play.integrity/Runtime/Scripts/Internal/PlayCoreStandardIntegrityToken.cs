@@ -28,6 +28,11 @@ namespace Google.Play.Integrity.Internal
             _javaStandardIntegrityToken = javaStandardIntegrityToken;
         }
 
+        internal AndroidJavaObject GetJavaTokenResponse()
+        {
+            return _javaStandardIntegrityToken;
+        }
+
         internal PlayServicesTask<int> ShowDialog(int typeCode)
         {
             if (_javaStandardIntegrityToken == null)

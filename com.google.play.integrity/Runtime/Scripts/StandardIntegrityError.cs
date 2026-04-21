@@ -27,7 +27,7 @@ namespace Google.Play.Integrity
         /// <summary>
         /// The error code associated with the failure.
         /// </summary>
-        public IntegrityErrorCode ErrorCode { get; private set; }
+        public StandardIntegrityErrorCode ErrorCode { get; private set; }
 
         /// <summary>
         /// Indicates whether the error is remediable and can be resolved by user action.
@@ -48,11 +48,11 @@ namespace Google.Play.Integrity
 
             try
             {
-                ErrorCode = PlayCoreTranslator.TranslatePlayCoreErrorCode(_internalException.ErrorCode);
+                ErrorCode = PlayCoreTranslator.TranslatePlayCoreStandardIntegrityErrorCode(_internalException.ErrorCode);
             }
             catch (AndroidJavaException)
             {
-                ErrorCode = IntegrityErrorCode.InternalError;
+                ErrorCode = StandardIntegrityErrorCode.InternalError;
             }
 
             try
@@ -65,10 +65,10 @@ namespace Google.Play.Integrity
             }
         }
 
-        internal PlayCoreStandardIntegrityException GetInternalException()
+        internal AndroidJavaObject GetJavaException()
         {
             if (_disposed) throw new ObjectDisposedException(nameof(StandardIntegrityError));
-            return _internalException;
+            return _internalException.GetJavaException();
         }
 
         /// <summary>

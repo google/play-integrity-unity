@@ -12,6 +12,7 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
+using System;
 using Google.Play.Common;
 using Google.Play.Core.Internal;
 using Google.Play.Integrity.Internal;
@@ -22,6 +23,10 @@ namespace Google.Play.Integrity
     /// <summary>
     /// Manages requests for integrity information.
     /// </summary>
+    /// <remarks>
+    /// DEPRECATED: Please use <see cref="StandardIntegrityManagerV2"/> instead.
+    /// </remarks>
+    [Obsolete("StandardIntegrityManager is deprecated. Please use StandardIntegrityManagerV2 instead, which provides enhanced error handling and native remediation dialog support.")]
     public class StandardIntegrityManager
     {
         private readonly PlayCoreStandardIntegrityManager _playCoreStandardIntegrityManager;
@@ -40,20 +45,22 @@ namespace Google.Play.Integrity
         /// <summary>
         /// Prepares the integrity token and makes it available for requesting via
         /// <see cref="StandardIntegrityTokenProvider"/>.
+        /// </summary>
+        /// <param name="request">The object to prepare the integrity token with.</param>
+        /// <returns>
+        /// A <see cref="PlayAsyncOperation{StandardIntegrityTokenProvider, StandardIntegrityErrorCode}"/> that returns
+        /// <see cref="StandardIntegrityTokenProvider"/> on successful callback or
+        /// <see cref="StandardIntegrityErrorCode"/> on failure callback.
+        /// </returns>
+        /// <remarks>
+        /// DEPRECATED: Please use <see cref="StandardIntegrityManagerV2.PrepareIntegrityToken(PrepareIntegrityTokenRequest)"/> instead.
         ///
         /// <para>You can call this method from time to time in order to refresh the resulting
         /// <see cref="StandardIntegrityTokenProvider"/>.</para>
         ///
         /// <para>The API makes a call to Google servers and hence requires a network connection.</para>
         ///
-        /// <para>Note that the API is in beta mode.</para>
-        /// </summary>
-        /// <param name="request">the object to prepare the integrity token with.</param>
-        /// <returns>
-        /// A <see cref="PlayAsyncOperation{StandardIntegrityTokenProvider, StandardIntegrityErrorCode}"/> that returns
-        /// <see cref="StandardIntegrityTokenProvider"/> on successful callback or
-        /// <see cref="StandardIntegrityErrorCode"/> on failure callback.
-        /// </returns>
+        /// </remarks>
         public PlayAsyncOperation<StandardIntegrityTokenProvider, StandardIntegrityErrorCode> PrepareIntegrityToken(
             PrepareIntegrityTokenRequest request)
         {

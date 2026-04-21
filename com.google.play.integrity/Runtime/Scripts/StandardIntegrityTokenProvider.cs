@@ -12,6 +12,7 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
+using System;
 using Google.Play.Common;
 using Google.Play.Core.Internal;
 using Google.Play.Integrity.Internal;
@@ -24,6 +25,10 @@ namespace Google.Play.Integrity
     ///
     /// <para>Response of <see cref="StandardIntegrityManager.PrepareIntegrityToken"/> call.</para>
     /// </summary>
+    /// <remarks>
+    /// DEPRECATED: Please use <see cref="StandardIntegrityManagerV2.StandardIntegrityTokenProvider"/> instead.
+    /// </remarks>
+    [Obsolete("StandardIntegrityTokenProvider is deprecated. Please use StandardIntegrityManagerV2.StandardIntegrityTokenProvider instead, which provides enhanced error handling and native remediation dialog support.")]
     public class StandardIntegrityTokenProvider
     {
         private readonly PlayCoreStandardIntegrityTokenProvider _playCoreStandardIntegrityTokenProvider;
@@ -38,18 +43,19 @@ namespace Google.Play.Integrity
 
         /// <summary>
         /// Returns a token for integrity-related enquiries.
-        ///
-        /// <para> This must be called only after <see cref="StandardIntegrityManager.PrepareIntegrityToken"/>
-        /// completes.</para>
-        ///
-        /// <para>Note that the API is in beta mode.</para>
         /// </summary>
-        /// <param name="request">the object to request integrity token with.</param>
+        /// <param name="request">The object to request the integrity token with.</param>
         /// <returns>
         /// A <see cref="PlayAsyncOperation{StandardIntegrityToken, StandardIntegrityErrorCode}"/> that returns
         /// <see cref="StandardIntegrityToken"/> on successful callback or
         /// <see cref="StandardIntegrityErrorCode"/> on failure callback.
         /// </returns>
+        /// <remarks>
+        /// DEPRECATED: Please use <see cref="StandardIntegrityManagerV2.StandardIntegrityTokenProvider.Request(StandardIntegrityTokenRequest)"/> instead.
+        ///
+        /// <para>This must be called only after <see cref="StandardIntegrityManager.PrepareIntegrityToken"/>
+        /// completes.</para>
+        /// </remarks>
         public PlayAsyncOperation<StandardIntegrityToken, StandardIntegrityErrorCode> Request(
             StandardIntegrityTokenRequest request)
         {
