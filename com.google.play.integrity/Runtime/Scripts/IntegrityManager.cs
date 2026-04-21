@@ -44,28 +44,31 @@ namespace Google.Play.Integrity
 
         /// <summary>
         /// Starts a PlayAsyncOperation to generate a token for integrity-related enquiries, and provides the token as
-        /// it's result.
-        ///
-        /// <p>The JSON payload is signed and encrypted as a nested JSON Web Token (JWT), that is
-        /// <a href="https://tools.ietf.org/html/rfc7516">JWE</a> of
-        /// <a href="https://tools.ietf.org/html/rfc7515">JWS</a>.
-        ///
-        /// <p>JWE uses <a href="https://tools.ietf.org/html/rfc7518#section-4.4">A256KW</a> as a key wrapping
-        /// algorithm and <a href="https://tools.ietf.org/html/rfc7518#section-5.3">A256GCM</a> as a content encryption
-        /// algorithm. JWS uses <a href="https://tools.ietf.org/html/rfc7518#section-3.4">ES256</a> as a signing
-        /// algorithm.
-        ///
-        /// <p>All decryption and verification should be done within a secure server environment. Do not decrypt or
-        /// verify the received token from within the client app. In particular, never expose any decryption keys to the
-        /// client app.
-        ///
-        /// <p>See https://developer.android.com/google/play/integrity/classic#token-format.
+        /// its result.
         /// </summary>
         /// <returns>
         /// A <see cref="PlayAsyncOperation{IntegrityTokenResponse, IntegrityErrorCode}"/> that returns
         /// <see cref="IntegrityTokenResponse"/> on successful callback or <see cref="IntegrityErrorCode"/> on failure
         /// callback.
         /// </returns>
+        /// <remarks>
+        /// DEPRECATED: Please use <see cref="IntegrityManagerV2.RequestIntegrityToken(IntegrityTokenRequest)"/> instead.
+        ///
+        /// <p>The JSON payload is signed and encrypted as a nested JSON Web Token (JWT), that is
+        /// <a href="https://tools.ietf.org/html/rfc7516">JWE</a> of
+        /// <a href="https://tools.ietf.org/html/rfc7515">JWS</a>.</p>
+        ///
+        /// <p>JWE uses <a href="https://tools.ietf.org/html/rfc7518#section-4.4">A256KW</a> as a key wrapping
+        /// algorithm and <a href="https://tools.ietf.org/html/rfc7518#section-5.3">A256GCM</a> as a content encryption
+        /// algorithm. JWS uses <a href="https://tools.ietf.org/html/rfc7518#section-3.4">ES256</a> as a signing
+        /// algorithm.</p>
+        ///
+        /// <p>All decryption and verification should be done within a secure server environment. Do not decrypt or
+        /// verify the received token from within the client app. In particular, never expose any decryption keys to the
+        /// client app.</p>
+        ///
+        /// <p>See https://developer.android.com/google/play/integrity/classic#token-format.</p>
+        /// </remarks>
         public PlayAsyncOperation<IntegrityTokenResponse, IntegrityErrorCode> RequestIntegrityToken(
             IntegrityTokenRequest integrityTokenRequest)
         {
