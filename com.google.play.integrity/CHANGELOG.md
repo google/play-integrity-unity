@@ -1,5 +1,11 @@
 # Changelog for com.google.play.integrity
 
+## [2.0.0] - 2026-04-09
+- Introduced `IntegrityManagerV2` and `StandardIntegrityManagerV2` with improved error handling and new `ShowDialog` methods.
+- Added support for additional remediation dialog types (e.g., `GET_INTEGRITY`, `GET_STRONG_INTEGRITY`) and triggering [remediation dialogs](https://developer.android.com/google/play/integrity/remediation#get-integrity-dialog) from API call failures.
+- Deprecated `IntegrityManager`, `StandardIntegrityManager`, `StandardIntegrityTokenProvider` and `ShowDialog` methods on `IntegrityTokenResponse` and `StandardIntegrityToken`.
+- Updated Java Play Integrity API dependency to 1.6.0.
+
 ## [1.4.1] - 2025-02-05
 - Updated Play Core dependency to 1.8.6.
 
